@@ -73,7 +73,7 @@ namespace Netflix
             SqlDataReader alquiladas = comando.ExecuteReader();
             while (alquiladas.Read())
             {
-                if (alquiladas["RentTo"] <= DateTime.Now)
+                if (DateTime.Parse(alquiladas["RentTo"].ToString()) <= DateTime.Now)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(alquiladas["MovieId"].ToString() + " " + alquiladas["Title"] + " " + alquiladas["RentFrom"] + " " + alquiladas["RentTo"]);

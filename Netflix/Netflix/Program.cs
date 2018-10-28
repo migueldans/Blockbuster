@@ -285,7 +285,6 @@ namespace Netflix
             conexion.Close();
             conexion.Open();
             string devolverPelicula;
-            bool devolverFilm = false;
             Console.WriteLine("Mis peliculas alquiladas.");
             Console.WriteLine("-------------------------");
             Rent peliculaAlquiladas = new Rent(1,cliente.GetUserName());
@@ -308,9 +307,7 @@ namespace Netflix
 
             } while (devolverPelicula.ToUpper() != "S" && devolverPelicula.ToUpper() !="N");
 
-
             MenuRent();
-
             conexion.Close();
 
         }
