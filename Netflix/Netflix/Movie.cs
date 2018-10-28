@@ -19,19 +19,25 @@ namespace Netflix
 
         public Movie(int num)
         {
+            this.num = num;
         }
         
         public void MostrarPelicula()
         {
             conexion.Open();
-            int num;
 
-            cadena = "SELECT  FROM Movie WHERE MovieId ='" + num + "'";
+            cadena = "SELECT title, director, releasedate, contentrating, synopsis FROM Movie WHERE MovieId ='" + num + "'";
             comando = new SqlCommand(cadena, conexion);
             SqlDataReader films = comando.ExecuteReader();
-
+            while (films.Read())
+            {
+                Console.WriteLine(films["Title"]+"\nDirector: "+ films["director"] + "\nFecha de estreno: " + films["releasedate"]  +"\nEdadRecomendada: " + films["contentrating"]+"\nSinopsis: " + films["synopsis"]);
+            }
+            Console.WriteLine("\nPulse enter para volver al menú principal.");
+            Console.ReadLine();
             conexion.Close();
         }
+
 
         
     }

@@ -134,13 +134,13 @@ namespace Netflix
                 conexion.Close();
                 return false;
             }
-
         }
+
         public int SacarEdad()
         {
             conexion.Open();
 
-            cadena= "select convert(int, DATEDIFF(day, (SELECT BirthDate FROM Client WHERE UserName like 'migueldans'), getdate())/ 365.25)";
+            cadena= "select convert(int, DATEDIFF(day, (SELECT BirthDate FROM Client WHERE UserName like '"+userName+"'), getdate())/ 365.25)";
             comando = new SqlCommand(cadena, conexion);
             SqlDataReader age = comando.ExecuteReader();
             int edad = 0;

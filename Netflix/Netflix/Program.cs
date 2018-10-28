@@ -81,9 +81,8 @@ namespace Netflix
             {
                 if (coincideUser == true)
                 {
-                    Console.WriteLine("\n El nombre de usuario no está disponible, por favor introduzca otro:");
-                    userName = Console.ReadLine();
-                }
+                    Console.WriteLine("\n El nombre de usuario no está disponible.");
+                 }
                 Console.WriteLine("\n Introduzca su nombre de usuario:");
                 userName = Console.ReadLine();
                 cadena = "SELECT * FROM Client WHERE UserName like '" + userName + "'";
@@ -105,7 +104,7 @@ namespace Netflix
             {
                 if (coincideMail == true)
                 {
-                    Console.WriteLine("\n Ya se ha registrado con ese mail, por favor introduzca otro:");
+                    Console.WriteLine("\n Ya se ha registrado con ese mail.");
                 }
                 Console.WriteLine("\n Introduzca su correo electrónico:");
                 email = Console.ReadLine();
@@ -221,7 +220,8 @@ namespace Netflix
         {
             conexion.Open();
             int edad = cliente.SacarEdad();
-            cadena= "SELECT * FROM Movie WHERE ContentRating <='"+edad+"'";
+            int num;
+            cadena = "SELECT * FROM Movie WHERE ContentRating <='"+edad+"'";
             comando = new SqlCommand(cadena, conexion);
             SqlDataReader films = comando.ExecuteReader();
             while (films.Read())
@@ -231,8 +231,10 @@ namespace Netflix
             try 
             {
                 Console.WriteLine("Escriba un número para ver la sinopsis de la película elegida");
-                int num = Convert.ToInt32(Console.ReadLine());
-
+                num = Convert.ToInt32(Console.ReadLine());
+                Movie peliculaElegida = new Movie(num);
+                peliculaElegida.MostrarPelicula();
+                MenuRent();
             }
             catch (FormatException ex)
             {
@@ -242,37 +244,55 @@ namespace Netflix
             //{
             //    Console.WriteLine("Error, introduzca un número válido.");
             //}
+            
             Console.ReadLine();
             films.Close();
             conexion.Close();
+            
 
         }
         public static void AlquilarPeliculas()
         {
+            conexion.Close();
             conexion.Open();
             int edad = cliente.SacarEdad();
+            int numAlquiler;
             cadena = "SELECT * FROM Movie WHERE ContentRating <='" + edad + "' and StateMovie = 0";
             comando = new SqlCommand(cadena, conexion);
             SqlDataReader films = comando.ExecuteReader();
             while (films.Read())
             {
                 Console.WriteLine(films["MovieId"].ToString() + " " + films["Title"]);
+            }
+            try
+            {
+                Console.WriteLine("Escriba el numero de la pelicula a alquilar.");
+                numAlquiler = Convert.ToInt32(Console.ReadLine());
+                Rent peliculaAlquilada = new Rent(numAlquiler,cliente.GetUserName());
+                peliculaAlquilada.AlquilarPelicula();
+                MenuRent();
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Error, introduzca un número válido.");
             }
             films.Close();
             conexion.Close();
         }
         public static void MisPeliculasAlquiladas()
         {
-            conexion.Open();
-            cadena = "SELECT * FROM Movie WHERE ContentRating <='" + edad + "' and StateMovie = 0";
-            comando = new SqlCommand(cadena, conexion);
-            SqlDataReader films = comando.ExecuteReader();
-            while (films.Read())
-            {
-                Console.WriteLine(films["MovieId"].ToString() + " " + films["Title"]);
-            }
-            films.Close();
-            conexion.Close();
+            //conexion.Open();
+            //int clientId;
+            //cadena = "SELECT * FROM Rent WHERE clientId='" +clientId +"'";
+            //comando = new SqlCommand(cadena, conexion);
+            //SqlDataReader films = comando.ExecuteReader();
+            //while (films.Read())
+            //{
+            //    Console.WriteLine(films["MovieId"].ToString() + " " + films["Title"]);
+            //}
+            //Console.ReadLine();
+            //films.Close();
+            //conexion.Close();
         }
         public static void CerrarSesion()
         {
