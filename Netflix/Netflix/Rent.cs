@@ -39,15 +39,63 @@ namespace Netflix
         {
             conexion.Close();
             conexion.Open();
-            
-            DateTime thisDay = DateTime.Today;
-            thisDay = Convert.ToDateTime(Console.ReadLine());
-            DateTime newDate = thisDay.AddDays(3);
-            newDate = Convert.ToDateTime(Console.ReadLine());
-            cadena = "INSERT INTO Rent VALUES ('" + newRentId + "','" + "select clientid from Client where username ='"+userName+"' " + "','" + numAlquiler + "','" + thisDay + "','" + newDate + "')";
+
+            cadena = "INSERT INTO Rent VALUES ('" + newRentId + "', (select clientid from Client where username ='" + userName + "'),'" + numAlquiler + "',getdate(),DATEADD(dd, 3, GETDATE()))";
             comando = new SqlCommand(cadena, conexion);
             comando.ExecuteReader();
+            conexion.Close();
 
+            conexion.Open();
+            cadena = "UPDATE movie SET statemovie=1 where movieid='" + numAlquiler + "'";
+            comando = new SqlCommand(cadena, conexion);
+            comando.ExecuteReader();
+            conexion.Close();
+
+            conexion.Open();
+            cadena = "SELECT title FROM Movie WHERE movieId='" + numAlquiler + "'";
+            comando = new SqlCommand(cadena, conexion);
+            SqlDataReader titulo = comando.ExecuteReader();
+            while (titulo.Read())
+            {
+                Console.WriteLine("Has alquilado la pelicula " + titulo["title"].ToString());
+            }
+            Console.ReadLine();
+            conexion.Close();
+        }
+
+        public void PeliculasAlquiladas()
+        {
+            conexion.Close();
+            conexion.Open();
+
+            cadena = "SELECT r.clientid, r.RentFrom, r.RentTo, r.movieid, m.title FROM Rent r, Movie m WHERE r.clientId = (SELECT clientId FROM Client WHERE UserName like '" + userName + "') and r.movieid = m.movieid and m.StateMovie = 1";
+            comando = new SqlCommand(cadena, conexion);
+            SqlDataReader alquiladas = comando.ExecuteReader();
+            while (alquiladas.Read())
+            {
+                if (alquiladas["RentTo"] <= DateTime.Now)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(alquiladas["MovieId"].ToString() + " " + alquiladas["Title"] + " " + alquiladas["RentFrom"] + " " + alquiladas["RentTo"]);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                Console.WriteLine(alquiladas["MovieId"].ToString() + " " + alquiladas["Title"] + " " + alquiladas["RentFrom"] + " " + alquiladas["RentTo"]);
+            }
+        }
+            Console.ReadLine();
+            alquiladas.Close();
+            conexion.Close();
+        }
+
+        public void DevolverPeliculas(int numDevolver)
+        {
+            conexion.Close();
+            conexion.Open();
+            cadena = "UPDATE movie SET statemovie=0 where movieid='" + numDevolver + "'";
+            comando = new SqlCommand(cadena, conexion);
+            comando.ExecuteReader();
             conexion.Close();
         }
     }

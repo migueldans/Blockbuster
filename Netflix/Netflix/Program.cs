@@ -168,7 +168,7 @@ namespace Netflix
 
             conexion.Close();
             MenuRent();
-            //TODO aqui hay o en la clase client hay que sacar el id del cliente y guardarlo en una variable,que usaremos despues en el aquiler de peliculas
+           
         }
 
         public static void Salir()
@@ -180,7 +180,7 @@ namespace Netflix
         {
             int numSelected = 0;
 
-            Console.WriteLine("\n¿Qué desea hacer?.");
+            Console.WriteLine("\n¿Qué desea hacer?");
 
             do
             {
@@ -270,6 +270,7 @@ namespace Netflix
                 numAlquiler = Convert.ToInt32(Console.ReadLine());
                 Rent peliculaAlquilada = new Rent(numAlquiler,cliente.GetUserName());
                 peliculaAlquilada.AlquilarPelicula();
+                Console.ReadLine();
                 MenuRent();
             }
             catch (FormatException ex)
@@ -281,18 +282,37 @@ namespace Netflix
         }
         public static void MisPeliculasAlquiladas()
         {
-            //conexion.Open();
-            //int clientId;
-            //cadena = "SELECT * FROM Rent WHERE clientId='" +clientId +"'";
-            //comando = new SqlCommand(cadena, conexion);
-            //SqlDataReader films = comando.ExecuteReader();
-            //while (films.Read())
-            //{
-            //    Console.WriteLine(films["MovieId"].ToString() + " " + films["Title"]);
-            //}
-            //Console.ReadLine();
-            //films.Close();
-            //conexion.Close();
+            conexion.Close();
+            conexion.Open();
+            string devolverPelicula;
+            bool devolverFilm = false;
+            Console.WriteLine("Mis peliculas alquiladas.");
+            Console.WriteLine("-------------------------");
+            Rent peliculaAlquiladas = new Rent(1,cliente.GetUserName());
+            peliculaAlquiladas.PeliculasAlquiladas();
+            Console.WriteLine("¿Desea devolver alguna pelicula? (Escriba S/N)");
+
+            do
+            {
+                devolverPelicula = Console.ReadLine();
+                if (devolverPelicula.ToUpper() != "S" && devolverPelicula.ToUpper() != "N")
+                {
+                Console.WriteLine("Error, Introduzca S o N");
+                }               
+                else if (devolverPelicula.ToUpper() == "S")
+                {
+                    Console.WriteLine("Introduzca el numero de la película a devolver:");
+                    int numDevolver = Convert.ToInt32(Console.ReadLine());
+                    peliculaAlquiladas.DevolverPeliculas(numDevolver);
+                }
+
+            } while (devolverPelicula.ToUpper() != "S" && devolverPelicula.ToUpper() !="N");
+
+
+            MenuRent();
+
+            conexion.Close();
+
         }
         public static void CerrarSesion()
         {
