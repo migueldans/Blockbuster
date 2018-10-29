@@ -126,7 +126,7 @@ namespace Netflix
             Console.WriteLine("\n Introduzca su contraseña:");
             password = Console.ReadLine();
 
-            Console.WriteLine("\n Introduzca su fecha de nacimiento en formato dia/mes/año:");
+            Console.WriteLine("\n Introduzca su fecha de nacimiento en formato mes/dia/año:");
             birthDate = Convert.ToDateTime(Console.ReadLine());
 
             cliente = new Client(userName, firstName, lastName, birthDate, password, email);
@@ -218,6 +218,7 @@ namespace Netflix
 
         public static void PeliculasDisponibles()
         {
+            conexion.Close();
             conexion.Open();
             int edad = cliente.SacarEdad();
             int num;
@@ -230,7 +231,7 @@ namespace Netflix
             }
             try 
             {
-                Console.WriteLine("Escriba un número para ver la sinopsis de la película elegida");
+                Console.WriteLine("Escriba el número de la pelicula elegida para ver su sinapsis.");
                 num = Convert.ToInt32(Console.ReadLine());
                 Movie peliculaElegida = new Movie(num);
                 peliculaElegida.MostrarPelicula();
@@ -240,7 +241,7 @@ namespace Netflix
             {
                 Console.WriteLine("Error, introduzca un número válido.");
             }
-            //catch (Exception ex2)
+            //catch (Exception ex2) Esto deberia ser una excepcion de las peliculas disponibles
             //{
             //    Console.WriteLine("Error, introduzca un número válido.");
             //}

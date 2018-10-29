@@ -17,9 +17,10 @@ namespace Netflix
 
         private string firstName, lastName, userName, email, password;
         private DateTime birthDate;
-        private bool coincideUser = false;
-        private bool coincideMail = false;
-        private int newClientId = 0,id;
+        //private bool coincideUser = false;
+        //private bool coincideMail = false;
+        //private int id;
+        private int newClientId = 0;
 
 
         public Client(string userName, string password)
@@ -107,6 +108,7 @@ namespace Netflix
 
         public void Registro()
         {
+
             conexion.Open();
 
             cadena = "INSERT INTO Client VALUES (" + newClientId + ",'" + userName + "','" + firstName + "','" + lastName + "','" + birthDate.ToString("yyyy-dd-MM") + "','" + password + "','" + email + "')";

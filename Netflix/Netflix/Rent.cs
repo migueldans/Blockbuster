@@ -40,7 +40,7 @@ namespace Netflix
             conexion.Close();
             conexion.Open();
 
-            cadena = "INSERT INTO Rent VALUES ('" + newRentId + "', (select clientid from Client where username ='" + userName + "'),'" + numAlquiler + "',getdate(),DATEADD(dd, 3, GETDATE()))";
+            cadena = "INSERT INTO Rent VALUES ('" + newRentId + "', (select clientid from Client where username ='" + userName + "'),'" + numAlquiler + "',getdate(),DATEADD(dd,3, GETDATE()))";
             comando = new SqlCommand(cadena, conexion);
             comando.ExecuteReader();
             conexion.Close();
